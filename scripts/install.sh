@@ -24,7 +24,7 @@ if ! xcode-select -p >/dev/null 2>&1 || ! command -v swift >/dev/null 2>&1; then
     printf 'Finish that installation, then run this script again.\n' >&2
     exit 1
 fi
-SWIFT_VERSION="$(swift --version)"
+SWIFT_VERSION="$(swift --version 2>&1)"
 if [[ ! "$SWIFT_VERSION" =~ Swift\ version\ ([0-9]+) ]] || (( BASH_REMATCH[1] < 6 )); then
     printf 'Building Pocket Paws requires Swift 6 or newer (Xcode 16+ tools).\n' >&2
     printf 'Update your Apple developer tools, then check: swift --version\n' >&2

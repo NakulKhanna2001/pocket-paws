@@ -1,49 +1,26 @@
 # Pocket Paws 🐾
 
-Quiet pixel friends for your Mac cursor. Your animal stays beside the pointer,
-faces forward, and takes tiny steps while you move. Click reactions, gentle blinks,
-and an occasional nap add a little personality.
+Cute pixel animals that sit beside your Mac pointer, take tiny footsteps when you
+move, react to clicks, and nap when you're idle.
 
-**12 animals · customizable reactions · native macOS · MIT licensed**
+**12 animals · Apple Silicon & Intel · macOS 13+ · open source**
 
-<img src="docs/companion.gif" alt="Mochi taking small front-facing steps beside the pointer and reacting to a click" width="720">
+<img src="docs/companion.gif" alt="Mochi taking small footsteps beside the pointer" width="720">
 
-## Install on a Mac
-
-### Download the prebuilt app
-
-1. Open [Releases](https://github.com/NakulKhanna2001/pocket-paws/releases).
-2. Download **Pocket-Paws-macOS.zip** from the latest release and unzip it.
-3. Drag **Pocket Paws.app** into **Applications**.
-4. Open it. Look for the **paw icon in the menu bar**, rather than the Dock.
-
-Requires **macOS 13 Ventura or later**. Universal release builds contain both
-**Apple Silicon (M-series)** and **Intel** executables. No developer tools are
-needed to run a downloaded app.
-
-**Current release signing:** these prototype builds are ad-hoc signed, not Apple
-notarized. On a downloaded build, macOS may block the first launch. After trying
-to open the app, use **System Settings → Privacy & Security → Open Anyway** for
-Pocket Paws, then confirm Open. This is a one-time approval for this app; do not
-disable Gatekeeper globally. Managed work/school Macs may require IT approval.
-
-A future Developer ID-signed, notarized release can use the normal download,
-drag, and open flow without this extra approval.
+## Install
 
 ### Clone and install locally
 
-If the downloaded prototype is blocked, you can **build the app on your own Mac**.
-A locally compiled copy normally avoids the downloaded-app verification prompt.
-You do not need a paid Apple Developer membership for a local build.
+Building on your own Mac normally avoids the verification warning shown for the
+downloaded prototype. You need **Swift 6+ / Xcode 16+ command-line tools**.
 
-Requires **Swift 6+** and **Xcode 16+ command-line tools**. No third-party dependencies.
-If developer tools are not installed, run this once and finish Apple's installer:
+If you don't have Apple's developer tools, run this first and finish the installer:
 
 ```sh
 xcode-select --install
 ```
 
-Then run:
+Then run these commands in Terminal:
 
 ```sh
 git clone https://github.com/NakulKhanna2001/pocket-paws.git
@@ -51,33 +28,38 @@ cd pocket-paws
 bash scripts/install.sh
 ```
 
-The installer closes any running copy of Pocket Paws, builds it locally, installs
-it in **`~/Applications/Pocket Paws.app`**, and opens it. It checks that Swift is
-new enough, verifies the app's local signature, and retains your saved preferences.
-No `sudo` is needed. Look for the paw icon in your menu bar.
+This builds the app, installs it in **`~/Applications`**, and opens it. Look for the
+**paw icon in your menu bar**. No paid Apple Developer account is needed.
 
-If you have already cloned the project, update from inside its folder:
+If the script reports an older Swift version, update your developer tools.
 
-```sh
-git pull --ff-only
-bash scripts/install.sh
-```
+### Or download the app
 
-The first build can take a few minutes, in addition to the developer-tools download
-if needed. If the installer reports an older Swift version, update your Apple
-developer tools and check `swift --version` reports Swift 6 or newer. Managed Macs
-may still enforce their organization's app policies.
+1. Download **Pocket-Paws-macOS.zip** from [Releases](https://github.com/NakulKhanna2001/pocket-paws/releases).
+2. Unzip it and drag **Pocket Paws.app** into **Applications**.
+3. Open it and click the paw icon in the menu bar.
 
-For development, `bash scripts/build-app.sh` only builds the app under `dist/`.
-Local builds use your Mac's architecture by default; use `UNIVERSAL=1` for both
-Apple Silicon and Intel. `INSTALL_DIR` changes the install destination, and
-`bash scripts/install.sh --no-open` installs without launching the app.
+The current prototype isn't notarized by Apple. If macOS blocks it, try opening it
+once, then go to **System Settings → Privacy & Security → Open Anyway**.
 
-## Choose your friend
+## Use it
 
-Click the **paw icon** in the menu bar, then click an animal. Scroll within the
-panel for the size controls, **Preview steps**, gesture mappings, and preferences.
-Your choices save automatically.
+Click the paw icon to choose an animal, change its size, preview footsteps, or
+customize reactions. Your choices save automatically.
+
+| What you do | What your friend does |
+| --- | --- |
+| Move the pointer | Takes small, front-facing steps beside it |
+| Left click | Paw tap |
+| Right click | Wink |
+| Hold, then release | Crouch, then hop |
+| Drag | Carry a tiny box |
+| Stay idle | Take a nap |
+
+The animal stays beside your pointer—there's no chasing or delayed catch-up.
+Turn on **Calmer animations** for still poses, or use the main switch to pause it.
+
+## Meet the animals
 
 | Friend | Animal | Friend | Animal |
 | --- | --- | --- | --- |
@@ -88,114 +70,23 @@ Your choices save automatically.
 | Biscuit | Puppy | Nibble | Hamster |
 | Honey | Bear | Sprout | Turtle |
 
-<img src="preview.png" alt="The Pocket Paws menu-bar animal picker" width="432">
+## Update or remove
 
-## How it behaves
-
-| Input | Default reaction |
-| --- | --- |
-| Move your pointer | Stay beside it with small, front-facing footsteps |
-| Stop moving | Rest immediately, with an occasional blink |
-| Left click | Paw tap |
-| Right click | Wink and a heart |
-| Hold left click for 0.45 seconds | Crouch |
-| Release after holding | Happy hop |
-| Drag at least 4 points | Carry a tiny box |
-| Idle for 6 seconds | Nap |
-
-The animal stays at a small offset from the pointer and stops with it. Version
-0.1.2 keeps the small six-frame footstep animation, without chasing, catch-up motion,
-or side-profile turns. Use **Preview steps** to see the animation in place.
-
-Left click, right click, hold, and drag can each be mapped to different reactions.
-Three sizes, idle naps, and calmer animations are available. Calmer animations
-and macOS Reduce Motion keep both footsteps and reaction poses still.
-
-**Prototype scope:** this is a click-through desktop companion alongside the native
-pointer, not a replacement for the system cursor. It is configured to join Spaces
-and full-screen apps; secure system surfaces or exclusive full-screen apps may
-suppress third-party overlays. Long press is not a pressure-sensitive Force Click,
-and the app does not detect every application's “thinking/loading” state.
-
-## Pause, update, or uninstall
-
-- **Pause:** turn off the switch in the menu-bar panel. This stops tracking too.
-- **Quit:** click **Quit** at the bottom of the panel.
-- **Update:** quit the app, replace it with the newer copy, and reopen it.
-- **Uninstall:** quit and move Pocket Paws.app to the Trash. Preferences are stored
-  under `dev.pocketpaws.mac`; optionally remove them with `defaults delete dev.pocketpaws.mac`.
-
-The app does not register itself to launch at login. You can add it using macOS
-System Settings → General → Login Items if you want it to start automatically.
-
-## Privacy and permissions
-
-Pocket Paws uses public AppKit APIs to read mouse position/button state and observe
-mouse-down events. It does not record the screen, capture typed text, or use the
-network. No Accessibility permission prompt is requested. The overlay ignores
-mouse events and does not take keyboard focus.
-
-## Fork and add an animal
-
-The code **and original pixel art** are MIT licensed. Fork this repository and:
-
-1. Copy a JSON file in `Sources/PawsCore/Animals/` and give it a unique `id`.
-2. Set the name, species, personality, and six-digit RGB `accent`.
-3. Draw `pixels`: a front-facing rectangular sprite, 8–48 pixels per side.
-   `.` means transparent. Add each other character to `palette` with an RGB hex
-   color without `#`. Reserve `o` for outline, `b` for body, and `e` for eyes.
-4. Set `eyeRow` and the two `eyeColumns` to the zero-based front-facing `e` pixels.
-5. Optionally add `sidePixels` with the same dimensions and palette for alternate
-   artwork in your fork. The quiet desktop companion uses the front sprite.
-6. Update the expected animal count in `Tests/PawsChecks/main.swift`, run
-   `swift run PawsChecks`, and rebuild.
-
-Files are discovered automatically, sorted by filename. The optional side-profile
-art and walk-export tool remain available for artists experimenting in a fork.
-For a distributed fork, change `CFBundleIdentifier` in `Resources/Info.plist` to
-your own reverse-DNS identifier.
-
-## Development
-
-```text
-Sources/PawsCore/          Animal schema, gesture state machine, screen placement
-Sources/PawsCore/Animals/  Front and side pixel-art JSON
-Sources/PocketPaws/        AppKit overlay, SwiftUI menu-bar controls, renderer
-Tests/PawsChecks/          Gesture, asset, and multi-display checks
-Resources/Info.plist       macOS app metadata
-scripts/build-app.sh      App bundle, icon generation, signing, release ZIP
-scripts/install.sh        Local build, installation, and launch
-```
-
-Position updates run at 60 Hz; pixel-art reactions run at 8 fps. The pet follows
-the pointer directly, with placement clamped to the current display's edges.
+If you installed from a clone, run this inside the `pocket-paws` folder:
 
 ```sh
-swift run PawsChecks
-swift run PocketPaws --smoke-test
-swift run PocketPaws --render-preview /absolute/path/preview.png
-swift run PocketPaws --export-walk-preview /absolute/path/walking.gif
-swift run PocketPaws --export-companion-preview /absolute/path/companion.gif
+git pull --ff-only
+bash scripts/install.sh
 ```
 
-The smoke test launches and exits the real AppKit app. Preview commands render the
-actual art and placement without recording your desktop. Before releasing, also check
-your mouse, display layouts, Spaces, and preferred full-screen apps interactively.
+For a downloaded copy, quit the app and replace it with the newer download.
+To uninstall, choose **Quit** in the paw menu and move the app to the Trash.
 
-## Signing a public release
+## Make it your own
 
-The build script creates `dist/Pocket Paws.app` and `dist/Pocket-Paws-macOS.zip`.
-For a Developer ID-signed and notarized release, with your certificate and notary
-profile already configured:
+Fork the repository to add animals or change the behavior. The code and original
+artwork are [MIT licensed](LICENSE). See the [developer guide](docs/DEVELOPMENT.md)
+for building, adding animals, running checks, and signing releases.
 
-```sh
-UNIVERSAL=1 SIGN_IDENTITY="Developer ID Application: Your Name (TEAMID)" bash scripts/build-app.sh
-xcrun notarytool submit dist/Pocket-Paws-macOS.zip --keychain-profile YOUR_PROFILE --wait
-xcrun stapler staple "dist/Pocket Paws.app"
-ditto -c -k --sequesterRsrc --keepParent "dist/Pocket Paws.app" dist/Pocket-Paws-macOS.zip
-```
-
-The GitHub Actions workflow in `.github/workflows/build.yml` runs on pushes,
-pull requests, and manual dispatch. It runs the checks and builds an ad-hoc-signed
-universal ZIP, available as a run artifact. It does not automatically notarize or
-publish releases.
+Pocket Paws is a companion beside the normal cursor. It doesn't record your screen,
+capture typed text, or use the network.
