@@ -44,9 +44,13 @@ once, then go to **System Settings → Privacy & Security → Open Anyway**.
 
 ## Windows preview
 
-A native Windows version is being checked in [GitHub Actions](https://github.com/NakulKhanna2001/pocket-paws/actions/workflows/windows.yml).
-It uses the same 12 animals, footsteps, and click reactions, with an animal picker
-in the system tray. See the [Windows guide](docs/WINDOWS.md) to build from a clone.
+1. Download **Pocket-Paws-Windows-win-x64.zip** from the [Windows preview release](https://github.com/NakulKhanna2001/pocket-paws/releases/tag/windows-v0.1.0).
+2. Extract the ZIP and double-click **PocketPaws.exe**.
+3. Click the animal icon in the **system tray** near the clock to choose a friend.
+
+For 64-bit Windows 10/11; the .NET runtime is included. This preview is unsigned,
+so Windows may show a SmartScreen prompt. See the [Windows guide](docs/WINDOWS.md)
+for screenshots, settings, and building from a clone.
 
 ## Use it
 
