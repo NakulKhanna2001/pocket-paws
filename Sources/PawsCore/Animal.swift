@@ -8,7 +8,7 @@ public struct Animal: Codable, Identifiable, Equatable {
     public let accent: String
     public let palette: [String: String]
     public let pixels: [String]
-    /// Optional right-facing walking artwork; idle and reactions use `pixels`.
+    /// Optional alternate artwork for forks; the desktop companion uses `pixels`.
     public let sidePixels: [String]?
     public let eyeRow: Int
     public let eyeColumns: [Int]

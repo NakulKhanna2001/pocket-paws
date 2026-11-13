@@ -74,6 +74,7 @@ public struct GestureEngine {
     public var napsEnabled = true
     private var previous: PointerSample?
     private var lastActivity: TimeInterval = 0
+    private var lastMovement: TimeInterval = -.infinity
     private var pressStarted: TimeInterval?
     private var pressOrigin: (Double, Double)?
     private var dragging = false
@@ -87,6 +88,7 @@ public struct GestureEngine {
         pressOrigin = nil
         transient = nil
         dragging = false
+        lastMovement = -.infinity
     }
 
     public mutating func react(to gesture: Gesture, at time: TimeInterval) {
@@ -106,6 +108,7 @@ public struct GestureEngine {
         let moving = hypot(dx, dy) > 0.25
         if moving {
             lastActivity = sample.time
+            lastMovement = sample.time
         }
 
         let leftDown = sample.buttons & 1 != 0
@@ -140,6 +143,7 @@ public struct GestureEngine {
         }
         if sample.buttons != 0 { lastActivity = sample.time }
         if let reaction = transient, sample.time < reaction.1 { return reaction.0 }
+        if sample.time - lastMovement < 0.12 { return .walk }
         if napsEnabled && sample.time - lastActivity >= 6 { return .sleep }
         return .idle
     }

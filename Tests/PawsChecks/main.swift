@@ -75,12 +75,13 @@ check("brief mouse clicks between polling samples are retained") {
     try expect(engine.update(sample(0.016)) == .wink)
 }
 
-check("idle nap wakes quietly when the pointer moves") {
+check("movement wakes the pet with small steps that settle when the pointer stops") {
     var engine = GestureEngine()
     _ = engine.update(sample(10))
     try expect(engine.update(sample(16.1)) == .sleep)
-    try expect(engine.update(sample(17, x: 90)) == .idle)
-    try expect(engine.update(sample(17.1, x: 120)) == .idle)
+    try expect(engine.update(sample(17, x: 90)) == .walk)
+    try expect(engine.update(sample(17.1, x: 120)) == .walk)
+    try expect(engine.update(sample(17.3, x: 120)) == .idle)
 }
 
 check("naps can be disabled; held buttons never sleep") {

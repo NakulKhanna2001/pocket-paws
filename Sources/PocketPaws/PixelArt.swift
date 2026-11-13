@@ -54,7 +54,7 @@ enum PixelPainter {
         let p = max(1, floor(min(size.width / CGFloat(animal.width + 8), size.height / CGFloat(animal.height + 8))))
         let tick = reducedMotion ? 0 : frame
         let walking = pose == .walk && !reducedMotion
-        let pixels = (pose == .walk ? (animal.sidePixels ?? animal.pixels) : animal.pixels).map(Array.init)
+        let pixels = animal.pixels.map(Array.init)
         let feet = walking ? feet(in: pixels) : []
         let bob: CGFloat
         switch pose {
@@ -92,10 +92,9 @@ enum PixelPainter {
 
         // Six poses: plant, pass, lift; the opposite foot follows half a cycle
         // later. Cancel body bounce at the ankles so planted feet stay grounded.
-        // In a right-facing profile the planted foot travels backward relative
-        // to the torso, then swings forward in the air. Mirroring reverses both.
-        let stride = [1, 0, -1, -1, 0, 1]
-        let lift = [0, 0, 0, -1, -1, -1]
+        // Small alternating steps on the front-facing sprite.
+        let stride = [-1, 0, 1, 1, 0, -1]
+        let lift = [0, 0, -1, -1, -1, 0]
         for (index, foot) in feet.enumerated() {
             let phase = (tick + index * 3) % 6
             let dx = stride[phase]

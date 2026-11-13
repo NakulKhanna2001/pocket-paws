@@ -1,12 +1,12 @@
 # Pocket Paws 🐾
 
 Quiet pixel friends for your Mac cursor. Your animal stays beside the pointer,
-faces forward, and adds a little personality with click reactions, gentle blinks,
-and an occasional nap.
+faces forward, and takes tiny steps while you move. Click reactions, gentle blinks,
+and an occasional nap add a little personality.
 
 **12 animals · customizable reactions · native macOS · MIT licensed**
 
-<img src="docs/companion.gif" alt="Mochi staying beside the pointer and reacting to a click" width="720">
+<img src="docs/companion.gif" alt="Mochi taking small front-facing steps beside the pointer and reacting to a click" width="720">
 
 ## Install on a Mac
 
@@ -58,7 +58,7 @@ by default. Build both architectures with `UNIVERSAL=1 bash scripts/build-app.sh
 ## Choose your friend
 
 Click the **paw icon** in the menu bar, then click an animal. Scroll within the
-panel for the size controls, gesture mappings, reaction previews, and preferences.
+panel for the size controls, **Preview steps**, gesture mappings, and preferences.
 Your choices save automatically.
 
 | Friend | Animal | Friend | Animal |
@@ -76,7 +76,7 @@ Your choices save automatically.
 
 | Input | Default reaction |
 | --- | --- |
-| Move your pointer | Stay beside it, front-facing and still |
+| Move your pointer | Stay beside it with small, front-facing footsteps |
 | Stop moving | Rest immediately, with an occasional blink |
 | Left click | Paw tap |
 | Right click | Wink and a heart |
@@ -86,11 +86,12 @@ Your choices save automatically.
 | Idle for 6 seconds | Nap |
 
 The animal stays at a small offset from the pointer and stops with it. Version
-0.1.1 removes chasing, catch-up motion, and automatic walking for a quieter desktop.
+0.1.2 keeps the small six-frame footstep animation, without chasing, catch-up motion,
+or side-profile turns. Use **Preview steps** to see the animation in place.
 
 Left click, right click, hold, and drag can each be mapped to different reactions.
 Three sizes, idle naps, and calmer animations are available. Calmer animations
-and macOS Reduce Motion also keep the reaction poses still.
+and macOS Reduce Motion keep both footsteps and reaction poses still.
 
 **Prototype scope:** this is a click-through desktop companion alongside the native
 pointer, not a replacement for the system cursor. It is configured to join Spaces

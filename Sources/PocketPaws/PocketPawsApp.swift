@@ -191,7 +191,12 @@ enum ArtExport {
             cursor.stroke()
             NSColor(hex: "35483E").setFill()
             cursor.fill()
-            let label = (pose == .idle ? "Quiet company · right by your pointer" : "A little paw tap when you click") as NSString
+            let label: NSString
+            switch pose {
+            case .walk: label = "Little steps · right beside your pointer"
+            case .idle: label = "Settled · right beside your pointer"
+            default: label = "A little paw tap when you click"
+            }
             let attributes: [NSAttributedString.Key: Any] = [.font: NSFont.systemFont(ofSize: 14, weight: .medium), .foregroundColor: NSColor(hex: "557A5B")]
             label.draw(at: NSPoint(x: 360 - label.size(withAttributes: attributes).width / 2, y: 210), withAttributes: attributes)
             image.unlockFocus()

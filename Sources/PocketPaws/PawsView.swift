@@ -164,9 +164,18 @@ struct PawsView: View {
                     .accessibilityAddTraits(selected ? .isSelected : [])
                 }
             }
-            Text("Quiet company, right by your pointer.")
-                .font(.system(size: 10))
-                .foregroundStyle(Theme.secondary)
+            HStack {
+                Text("Little steps, right by your pointer.")
+                    .foregroundStyle(Theme.secondary)
+                Spacer()
+                Button { model.preview(.walk) } label: {
+                    Label("Preview steps", systemImage: "figure.walk")
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(Theme.green)
+                .help("Preview the small front-facing footsteps")
+            }
+            .font(.system(size: 10))
         }
     }
 
