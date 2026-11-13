@@ -100,7 +100,6 @@ struct PawsView: View {
                 }
                 .padding(14)
                 AnimalSprite(animal: model.animal, pose: model.activePose,
-                             facingLeft: model.activeFacingLeft,
                              reducedMotion: model.effectiveReducedMotion)
                     .frame(width: 148, height: 148)
                     .offset(y: -3)
@@ -165,20 +164,9 @@ struct PawsView: View {
                     .accessibilityAddTraits(selected ? .isSelected : [])
                 }
             }
-            HStack {
-                Text("Chases your cursor, then faces you.")
-                    .foregroundStyle(Theme.secondary)
-                Spacer()
-                Button {
-                    model.preview(.walk)
-                } label: {
-                    Label("Preview walk", systemImage: "figure.walk")
-                }
-                .buttonStyle(.plain)
-                .foregroundStyle(Theme.green)
-                .help("Preview your animal's walking animation")
-            }
-            .font(.system(size: 10))
+            Text("Quiet company, right by your pointer.")
+                .font(.system(size: 10))
+                .foregroundStyle(Theme.secondary)
         }
     }
 

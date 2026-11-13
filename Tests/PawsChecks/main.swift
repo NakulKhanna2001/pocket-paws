@@ -75,14 +75,12 @@ check("brief mouse clicks between polling samples are retained") {
     try expect(engine.update(sample(0.016)) == .wink)
 }
 
-check("idle nap wakes with motion, facing the travel direction") {
+check("idle nap wakes quietly when the pointer moves") {
     var engine = GestureEngine()
     _ = engine.update(sample(10))
     try expect(engine.update(sample(16.1)) == .sleep)
-    try expect(engine.update(sample(17, x: 90)) == .walk)
-    try expect(engine.facingLeft)
-    try expect(engine.update(sample(17.1, x: 120)) == .walk)
-    try expect(!engine.facingLeft)
+    try expect(engine.update(sample(17, x: 90)) == .idle)
+    try expect(engine.update(sample(17.1, x: 120)) == .idle)
 }
 
 check("naps can be disabled; held buttons never sleep") {
@@ -118,11 +116,7 @@ check("all bundled animals are valid with unique IDs") {
     let animals = try Animal.bundled()
     try expect(animals.count == 12)
     try expect(Set(animals.map(\.id)).count == animals.count)
-    for animal in animals {
-        try animal.validate()
-        try expect(animal.sidePixels != nil, "\(animal.name) needs walking side-profile artwork")
-        try expect(animal.sidePixels != animal.pixels, "Side profile must be distinct from front artwork")
-    }
+    for animal in animals { try animal.validate() }
 }
 
 check("malformed sprites are rejected before rendering") {
@@ -167,78 +161,6 @@ check("ordinary placement leaves the click point clear") {
                                          screen: CGRect(x: 0, y: 0, width: 1440, height: 900))
     try expect(origin == CGPoint(x: 312, y: 328))
     try expect(!CGRect(origin: origin, size: size).contains(pointer))
-}
-
-let chaseScreen = CGRect(x: 0, y: 0, width: 1440, height: 900)
-let chaseSize = CGSize(width: 64, height: 64)
-
-check("pet chases from its own position, without teleporting to the pointer") {
-    var chaser = PointerChaser()
-    _ = chaser.update(pointer: CGPoint(x: 200, y: 400), size: chaseSize, screen: chaseScreen, time: 0)
-    let before = chaser.center!
-    let frame = chaser.update(pointer: CGPoint(x: 900, y: 400), size: chaseSize, screen: chaseScreen, time: 1.0 / 60)
-    let after = chaser.center!
-    try expect(frame.isMoving && !frame.facingLeft)
-    try expect(after.x > before.x && after.x < 900)
-    try expect(hypot(after.x - before.x, after.y - before.y) <= 1000.0 / 60 + 0.001)
-}
-
-check("direction aims toward the cursor, rather than copying its last motion") {
-    var chaser = PointerChaser()
-    _ = chaser.update(pointer: CGPoint(x: 200, y: 400), size: chaseSize, screen: chaseScreen, time: 0)
-    _ = chaser.update(pointer: CGPoint(x: 900, y: 400), size: chaseSize, screen: chaseScreen, time: 0.02)
-    let returningCursor = chaser.update(pointer: CGPoint(x: 800, y: 400), size: chaseSize, screen: chaseScreen, time: 0.04)
-    try expect(returningCursor.isMoving && !returningCursor.facingLeft, "Cursor is still to the pet's right")
-    let crossedCursor = chaser.update(pointer: CGPoint(x: 50, y: 400), size: chaseSize, screen: chaseScreen, time: 0.06)
-    try expect(crossedCursor.isMoving && crossedCursor.facingLeft)
-}
-
-check("pet keeps walking after the cursor stops, then settles facing forward") {
-    var chaser = PointerChaser()
-    _ = chaser.update(pointer: CGPoint(x: 200, y: 400), size: chaseSize, screen: chaseScreen, time: 0)
-    let target = CGPoint(x: 800, y: 400)
-    var frame = chaser.update(pointer: target, size: chaseSize, screen: chaseScreen, time: 0.02)
-    try expect(frame.pose(for: .idle) == .walk, "Stationary cursor must not stop a pet that is still catching up")
-    try expect(frame.pose(for: .wink) == .wink, "Click reactions still take priority")
-    for tick in 2...240 {
-        frame = chaser.update(pointer: target, size: chaseSize, screen: chaseScreen, time: Double(tick) / 60)
-    }
-    try expect(!frame.isMoving && frame.pose(for: .walk) == .idle)
-    let remaining = hypot(target.x - chaser.center!.x, target.y - chaser.center!.y)
-    try expect(remaining >= 40 && remaining <= 41, "Pet stops outside the cursor's click point")
-}
-
-check("chasing is frame-rate independent") {
-    func position(hz: Int) -> CGPoint {
-        var chaser = PointerChaser()
-        _ = chaser.update(pointer: CGPoint(x: 500, y: 400), size: chaseSize, screen: chaseScreen, time: 0)
-        for tick in 1...hz {
-            _ = chaser.update(pointer: CGPoint(x: 650, y: 400), size: chaseSize, screen: chaseScreen, time: Double(tick) / Double(hz))
-        }
-        return chaser.center!
-    }
-    let a = position(hz: 30), b = position(hz: 120)
-    try expect(hypot(a.x - b.x, a.y - b.y) < 1)
-}
-
-check("screen changes and corner targets keep the entire pet visible") {
-    var chaser = PointerChaser()
-    _ = chaser.update(pointer: CGPoint(x: 500, y: 400), size: chaseSize, screen: chaseScreen, time: 0)
-    let left = CGRect(x: -1920, y: -200, width: 1920, height: 1080)
-    for (index, pointer) in [CGPoint(x: -1920, y: -200), CGPoint(x: -1, y: 879)].enumerated() {
-        for tick in 0...240 {
-            let frame = chaser.update(pointer: pointer, size: chaseSize, screen: left, time: Double(index * 300 + tick + 1) / 60)
-            try expect(left.contains(CGRect(origin: frame.origin, size: chaseSize)))
-        }
-    }
-}
-
-check("reduced motion follows immediately in a still front-facing pose") {
-    var chaser = PointerChaser()
-    _ = chaser.update(pointer: CGPoint(x: 200, y: 400), size: chaseSize, screen: chaseScreen, time: 0)
-    let frame = chaser.update(pointer: CGPoint(x: 1100, y: 400), size: chaseSize, screen: chaseScreen, time: 0.02, reducedMotion: true)
-    try expect(!frame.isMoving && frame.pose(for: .walk) == .idle)
-    try expect(hypot(chaser.center!.x - 1100, chaser.center!.y - 400) < 41)
 }
 
 check("invalid side-profile artwork is rejected before rendering") {

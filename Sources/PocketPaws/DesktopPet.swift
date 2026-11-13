@@ -13,7 +13,6 @@ final class DesktopPet {
     private let panel: PetPanel
     private let sprite = SpriteNSView()
     private var engine = GestureEngine()
-    private var chaser = PointerChaser()
     private var timer: Timer?
     private var globalMonitor: Any?
     private var localMonitor: Any?
@@ -82,7 +81,6 @@ final class DesktopPet {
         if model.enabled && !suspended {
             guard timer == nil else { return }
             engine.reset()
-            chaser.reset()
             installMouseMonitors()
             let timer = Timer(timeInterval: 1.0 / 60.0, repeats: true) { [weak self] _ in
                 MainActor.assumeIsolated { self?.tick() }
@@ -119,30 +117,27 @@ final class DesktopPet {
         let pointer = NSEvent.mouseLocation
         engine.mappings = model.mappings
         engine.napsEnabled = model.napsEnabled
-        let gesture = engine.update(PointerSample(x: pointer.x, y: pointer.y,
-                                                  buttons: NSEvent.pressedMouseButtons, time: now))
+        var pose = engine.update(PointerSample(x: pointer.x, y: pointer.y,
+                                               buttons: NSEvent.pressedMouseButtons, time: now))
         let animal = model.animal
         let size = CGSize(width: (animal.width + 8) * model.pixelSize,
                           height: (animal.height + 8) * model.pixelSize)
         let screen = screens.first { NSMouseInRect(pointer, $0.frame, false) } ?? NSScreen.main
         guard let screen else { return }
         let reduced = model.effectiveReducedMotion
-        let chase = chaser.update(pointer: pointer, size: size, screen: screen.frame, time: now, reducedMotion: reduced)
-        let rect = NSRect(origin: chase.origin, size: size)
+        let origin = OverlayPlacement.origin(pointer: pointer, size: size, screen: screen.frame)
+        let rect = NSRect(origin: origin, size: size)
         if panel.frame != rect { panel.setFrame(rect, display: false) }
-        var pose = chase.pose(for: gesture)
         if now < model.demoUntil { pose = model.demoPose }
-        let facingLeft = pose == .walk && chase.facingLeft
         if model.activePose != pose { model.activePose = pose }
-        if model.activeFacingLeft != facingLeft { model.activeFacingLeft = facingLeft }
         let frame = reduced ? 0 : Int(now * 8)
-        let changed = frame != lastFrame || sprite.pose != pose || sprite.facingLeft != facingLeft
+        let changed = frame != lastFrame || sprite.pose != pose
             || lastAnimalID != animal.id || lastReducedMotion != reduced
         if changed {
             sprite.animal = animal
             sprite.pose = pose
             sprite.frameIndex = frame
-            sprite.facingLeft = facingLeft
+            sprite.facingLeft = false
             sprite.reducedMotion = reduced
             sprite.needsDisplay = true
             lastFrame = frame
@@ -160,9 +155,7 @@ final class DesktopPet {
         localMonitor = nil
         panel.orderOut(nil)
         engine.reset()
-        chaser.reset()
         model.activePose = .idle
-        model.activeFacingLeft = false
     }
 
     func stop() {

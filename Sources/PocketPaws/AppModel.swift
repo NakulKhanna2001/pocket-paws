@@ -18,7 +18,6 @@ final class AppModel: ObservableObject {
         }
     }
     @Published var activePose: Pose = .idle
-    @Published var activeFacingLeft = false
     @Published var demoPose: Pose = .idle
     @Published var demoUntil: TimeInterval = 0
 

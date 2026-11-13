@@ -21,8 +21,8 @@ enum PocketPawsApp {
                 try ArtExport.walkingPreview(animals: animals, to: URL(fileURLWithPath: args[2]))
                 return
             }
-            if args.count == 3 && args[1] == "--export-chase-preview" {
-                try ArtExport.chasePreview(animal: animals[0], to: URL(fileURLWithPath: args[2]))
+            if args.count == 3 && args[1] == "--export-companion-preview" {
+                try ArtExport.companionPreview(animal: animals[0], to: URL(fileURLWithPath: args[2]))
                 return
             }
             let delegate = AppDelegate(animals: animals)
@@ -142,15 +142,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 }
 
 enum ArtExport {
-    /// Exercise the same follower and renderer used on the desktop: move right,
-    /// pause, move left, pause. This captures catching up and turning frontward.
-    static func chasePreview(animal: Animal, to url: URL) throws {
+    /// Render direct pointer following and a click reaction without recording
+    /// the desktop. Uses the same placement and gesture engine as the app.
+    static func companionPreview(animal: Animal, to url: URL) throws {
         let count = 160
         guard let destination = CGImageDestinationCreateWithURL(url as CFURL, UTType.gif.identifier as CFString, count, nil) else {
-            throw AnimalError.invalid("Could not create chase preview")
+            throw AnimalError.invalid("Could not create companion preview")
         }
         CGImageDestinationSetProperties(destination, [kCGImagePropertyGIFDictionary: [kCGImagePropertyGIFLoopCount: 0]] as CFDictionary)
-        var chaser = PointerChaser()
+        var engine = GestureEngine()
         let screen = CGRect(x: 0, y: 0, width: 720, height: 180)
         let petSize = CGSize(width: 64, height: 64)
         for frame in 0..<count {
@@ -164,8 +164,8 @@ enum ArtExport {
             default: x = 100
             }
             let pointer = CGPoint(x: x, y: 95)
-            let follow = chaser.update(pointer: pointer, size: petSize, screen: screen, time: time)
-            let pose = follow.pose(for: .idle)
+            let origin = OverlayPlacement.origin(pointer: pointer, size: petSize, screen: screen)
+            let pose = engine.update(PointerSample(x: pointer.x, y: pointer.y, buttons: frame == 60 ? 1 : 0, time: time))
             let image = NSImage(size: NSSize(width: 720, height: 240))
             image.lockFocusFlipped(true)
             NSColor(hex: "FBFAF5").setFill()
@@ -174,9 +174,9 @@ enum ArtExport {
             NSBezierPath(roundedRect: NSRect(x: 12, y: 12, width: 696, height: 186), xRadius: 14, yRadius: 14).fill()
             if let context = NSGraphicsContext.current?.cgContext {
                 context.saveGState()
-                context.translateBy(x: follow.origin.x, y: 12 + screen.height - follow.origin.y - petSize.height)
+                context.translateBy(x: origin.x, y: 12 + screen.height - origin.y - petSize.height)
                 PixelPainter.draw(in: context, size: petSize, animal: animal, pose: pose,
-                                  frame: Int(time * 8), facingLeft: follow.facingLeft)
+                                  frame: Int(time * 8))
                 context.restoreGState()
             }
             let cursor = NSBezierPath()
@@ -191,17 +191,17 @@ enum ArtExport {
             cursor.stroke()
             NSColor(hex: "35483E").setFill()
             cursor.fill()
-            let label = (follow.isMoving ? "Chasing your cursor · side profile" : "Caught up · facing you") as NSString
+            let label = (pose == .idle ? "Quiet company · right by your pointer" : "A little paw tap when you click") as NSString
             let attributes: [NSAttributedString.Key: Any] = [.font: NSFont.systemFont(ofSize: 14, weight: .medium), .foregroundColor: NSColor(hex: "557A5B")]
             label.draw(at: NSPoint(x: 360 - label.size(withAttributes: attributes).width / 2, y: 210), withAttributes: attributes)
             image.unlockFocus()
             guard let tiff = image.tiffRepresentation, let bitmap = NSBitmapImageRep(data: tiff), let cgImage = bitmap.cgImage else {
-                throw AnimalError.invalid("Could not render chase frame")
+                throw AnimalError.invalid("Could not render companion frame")
             }
             CGImageDestinationAddImage(destination, cgImage, [kCGImagePropertyGIFDictionary: [kCGImagePropertyGIFDelayTime: 0.05]] as CFDictionary)
         }
-        guard CGImageDestinationFinalize(destination) else { throw AnimalError.invalid("Could not save chase preview") }
-        print("Chase preview saved: \(url.path)")
+        guard CGImageDestinationFinalize(destination) else { throw AnimalError.invalid("Could not save companion preview") }
+        print("Companion preview saved: \(url.path)")
     }
 
     /// Export the actual desktop renderer's six walking poses as a looping GIF.
