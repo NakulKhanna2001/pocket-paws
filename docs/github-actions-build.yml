@@ -1,3 +1,5 @@
+# Optional: copy to .github/workflows/build.yml to enable GitHub Actions.
+# Uploading an active workflow requires GitHub's workflow authorization scope.
 name: Build macOS app
 
 on:

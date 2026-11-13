@@ -179,5 +179,7 @@ xcrun stapler staple "dist/Pocket Paws.app"
 ditto -c -k --sequesterRsrc --keepParent "dist/Pocket Paws.app" dist/Pocket-Paws-macOS.zip
 ```
 
-The GitHub Actions workflow runs the checks and builds an ad-hoc-signed universal
-ZIP. It does not automatically notarize or publish releases.
+An optional GitHub Actions template is included at `docs/github-actions-build.yml`.
+To enable it, copy it to `.github/workflows/build.yml` and push using a GitHub login
+with workflow permission. It runs the checks and builds an ad-hoc-signed universal
+ZIP; it does not automatically notarize or publish releases.
