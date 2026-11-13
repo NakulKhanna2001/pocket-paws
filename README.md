@@ -10,7 +10,7 @@ and an occasional nap add a little personality.
 
 ## Install on a Mac
 
-### Download the app — easiest, about a minute
+### Download the prebuilt app
 
 1. Open [Releases](https://github.com/NakulKhanna2001/pocket-paws/releases).
 2. Download **Pocket-Paws-macOS.zip** from the latest release and unzip it.
@@ -30,30 +30,48 @@ disable Gatekeeper globally. Managed work/school Macs may require IT approval.
 A future Developer ID-signed, notarized release can use the normal download,
 drag, and open flow without this extra approval.
 
-### Build your own fork — developer route
+### Clone and install locally
+
+If the downloaded prototype is blocked, you can **build the app on your own Mac**.
+A locally compiled copy normally avoids the downloaded-app verification prompt.
+You do not need a paid Apple Developer membership for a local build.
 
 Requires **Swift 6+** and **Xcode 16+ command-line tools**. No third-party dependencies.
-If needed, install Apple's command-line tools with `xcode-select --install`, then
-check `swift --version` reports Swift 6 or newer.
+If developer tools are not installed, run this once and finish Apple's installer:
+
+```sh
+xcode-select --install
+```
+
+Then run:
 
 ```sh
 git clone https://github.com/NakulKhanna2001/pocket-paws.git
 cd pocket-paws
-swift run PawsChecks
-bash scripts/build-app.sh
-open "dist/Pocket Paws.app"
+bash scripts/install.sh
 ```
 
-To keep it in your personal Applications folder:
+The installer closes any running copy of Pocket Paws, builds it locally, installs
+it in **`~/Applications/Pocket Paws.app`**, and opens it. It checks that Swift is
+new enough, verifies the app's local signature, and retains your saved preferences.
+No `sudo` is needed. Look for the paw icon in your menu bar.
+
+If you have already cloned the project, update from inside its folder:
 
 ```sh
-mkdir -p "$HOME/Applications"
-ditto "dist/Pocket Paws.app" "$HOME/Applications/Pocket Paws.app"
-open "$HOME/Applications/Pocket Paws.app"
+git pull --ff-only
+bash scripts/install.sh
 ```
 
-The first build can take a few minutes. A local build uses your Mac's architecture
-by default. Build both architectures with `UNIVERSAL=1 bash scripts/build-app.sh`.
+The first build can take a few minutes, in addition to the developer-tools download
+if needed. If the installer reports an older Swift version, update your Apple
+developer tools and check `swift --version` reports Swift 6 or newer. Managed Macs
+may still enforce their organization's app policies.
+
+For development, `bash scripts/build-app.sh` only builds the app under `dist/`.
+Local builds use your Mac's architecture by default; use `UNIVERSAL=1` for both
+Apple Silicon and Intel. `INSTALL_DIR` changes the install destination, and
+`bash scripts/install.sh --no-open` installs without launching the app.
 
 ## Choose your friend
 
@@ -146,6 +164,7 @@ Sources/PocketPaws/        AppKit overlay, SwiftUI menu-bar controls, renderer
 Tests/PawsChecks/          Gesture, asset, and multi-display checks
 Resources/Info.plist       macOS app metadata
 scripts/build-app.sh      App bundle, icon generation, signing, release ZIP
+scripts/install.sh        Local build, installation, and launch
 ```
 
 Position updates run at 60 Hz; pixel-art reactions run at 8 fps. The pet follows

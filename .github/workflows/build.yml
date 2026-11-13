@@ -17,6 +17,8 @@ jobs:
         run: swift run PawsChecks
       - name: Build Apple Silicon and Intel app
         run: UNIVERSAL=1 bash scripts/build-app.sh
+      - name: Verify local installation
+        run: INSTALL_DIR="$RUNNER_TEMP/Pocket Paws Install" UNIVERSAL=1 bash scripts/install.sh --no-open
       - uses: actions/upload-artifact@v4
         with:
           name: Pocket-Paws-macOS
