@@ -43,6 +43,9 @@ Files are discovered automatically and sorted by filename. Two separated groups
 on the bottom occupied row identify the feet for the shared six-frame step cycle.
 The renderer is in `Sources/PocketPaws/PixelArt.swift`.
 
+Regenerate the README portraits with `swift scripts/export-readme-animals.swift`,
+then add your animal's picture, name, and species to the README table.
+
 For a distributed fork, change `CFBundleIdentifier` in `Resources/Info.plist` to
 your own reverse-DNS identifier.
 
