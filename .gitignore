@@ -3,3 +3,7 @@
 dist/
 .DS_Store
 *.xcodeproj/
+**/bin/
+**/obj/
+.vs/
+*.user

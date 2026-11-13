@@ -1,5 +1,9 @@
 # Developer guide
 
+This guide covers the Mac app. See the [Windows guide](WINDOWS.md) for the .NET
+tray app, Windows build commands, and native checks. Both apps embed the same
+animal JSON from `Sources/PawsCore/Animals/`.
+
 ## Build and install
 
 Requires Swift 6+ and Xcode 16+ command-line tools. There are no third-party

@@ -1,13 +1,13 @@
 # Pocket Paws 🐾
 
-Cute pixel animals that sit beside your Mac pointer, take tiny footsteps when you
+Cute pixel animals that sit beside your pointer, take tiny footsteps when you
 move, react to clicks, and nap when you're idle.
 
-**12 animals · Apple Silicon & Intel · macOS 13+ · open source**
+**12 animals · macOS 13+ · Windows 10/11 preview · open source**
 
 <img src="docs/companion.gif" alt="Mochi taking small footsteps beside the pointer" width="720">
 
-## Install
+## Install on macOS
 
 ### Clone and install locally
 
@@ -35,16 +35,22 @@ If the script reports an older Swift version, update your developer tools.
 
 ### Or download the app
 
-1. Download **Pocket-Paws-macOS.zip** from [Releases](https://github.com/NakulKhanna2001/pocket-paws/releases).
+1. Download **Pocket-Paws-macOS.zip** from the [Mac release](https://github.com/NakulKhanna2001/pocket-paws/releases/tag/v0.1.2).
 2. Unzip it and drag **Pocket Paws.app** into **Applications**.
 3. Open it and click the paw icon in the menu bar.
 
 The current prototype isn't notarized by Apple. If macOS blocks it, try opening it
 once, then go to **System Settings → Privacy & Security → Open Anyway**.
 
+## Windows preview
+
+A native Windows version is being checked in [GitHub Actions](https://github.com/NakulKhanna2001/pocket-paws/actions/workflows/windows.yml).
+It uses the same 12 animals, footsteps, and click reactions, with an animal picker
+in the system tray. See the [Windows guide](docs/WINDOWS.md) to build from a clone.
+
 ## Use it
 
-Click the paw icon to choose an animal, change its size, preview footsteps, or
+Click the menu-bar icon on Mac or system-tray animal on Windows to choose a friend, change its size, preview footsteps, or
 customize reactions. Your choices save automatically.
 
 | What you do | What your friend does |
@@ -72,7 +78,7 @@ Turn on **Calmer animations** for still poses, or use the main switch to pause i
 
 ## Update or remove
 
-If you installed from a clone, run this inside the `pocket-paws` folder:
+If you installed the Mac app from a clone, run this inside the `pocket-paws` folder:
 
 ```sh
 git pull --ff-only

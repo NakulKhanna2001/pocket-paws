@@ -1,0 +1,57 @@
+name: Build Windows app
+
+on:
+  push:
+    paths:
+      - 'windows/**'
+      - 'Sources/PawsCore/Animals/**'
+      - 'scripts/build-windows.ps1'
+      - '.github/workflows/windows.yml'
+  pull_request:
+    paths:
+      - 'windows/**'
+      - 'Sources/PawsCore/Animals/**'
+      - 'scripts/build-windows.ps1'
+      - '.github/workflows/windows.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+      - name: Check gestures, shared animals, stepping, and screen placement
+        run: dotnet run --project windows/PocketPaws.Checks -c Release
+      - name: Build self-contained Windows app
+        run: ./scripts/build-windows.ps1
+      - name: Check native overlay, tray, preferences, and pause/resume
+        shell: pwsh
+        run: |
+          $portable = Join-Path $env:RUNNER_TEMP 'Pocket Paws Portable'
+          Expand-Archive -Path 'dist/Pocket-Paws-Windows-win-x64.zip' -DestinationPath $portable -Force
+          $exe = Join-Path $portable 'PocketPaws.exe'
+          $report = Join-Path $PWD 'dist/windows-smoke.json'
+          $screenshot = Join-Path $PWD 'dist/windows-settings.png'
+          $process = Start-Process -FilePath $exe -ArgumentList @('--smoke-test', '--report', "`"$report`"", '--screenshot', "`"$screenshot`"") -PassThru
+          if (-not $process.WaitForExit(30000)) {
+            $process.Kill()
+            throw 'Native Windows smoke test timed out.'
+          }
+          if (Test-Path $report) { Get-Content $report }
+          if ($process.ExitCode -ne 0 -or -not (Test-Path $report)) { throw 'Native Windows smoke test failed.' }
+          if (-not (Get-Content $report | ConvertFrom-Json).success) { throw 'Native checks did not pass.' }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Pocket-Paws-Windows-win-x64
+          path: |
+            dist/Pocket-Paws-Windows-win-x64.zip
+            dist/Pocket-Paws-Windows-win-x64.zip.sha256
+            dist/windows-smoke.json
+            dist/windows-settings.png
