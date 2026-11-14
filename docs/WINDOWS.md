@@ -8,7 +8,7 @@ holds, and dragging.
 
 Requires **64-bit Windows 10 or Windows 11**. The default download is for x64 PCs.
 
-1. Download **Pocket-Paws-Windows-win-x64.zip** from the [Windows preview release](https://github.com/NakulKhanna2001/pocket-paws/releases/tag/windows-v0.1.0).
+1. Download **Pocket-Paws-Windows-win-x64.zip** from the [Windows preview release](https://github.com/NakulKhanna2001/pocket-paws/releases/tag/windows-v0.1.1).
 2. Extract the ZIP into a folder you want to keep.
 3. Double-click **PocketPaws.exe**.
 4. Click the **animal icon in the system tray**, near the clock, to choose a friend.
@@ -22,7 +22,7 @@ Use the picker to change animals, size, reactions, naps, and calmer animations.
 Right-click the tray icon for pause/resume and quit. Closing the picker keeps the
 companion running; choose **Quit Pocket Paws** to exit completely.
 
-<img src="windows-preview.png" alt="Windows animal picker with all 12 friends and Pengu selected" width="496">
+<img src="windows-preview.png" alt="Windows animal picker with all 12 friends and Maple the red panda selected" width="496">
 
 The picker above was rendered by the Windows CI launch check. Controls follow
 the Windows theme on your computer.

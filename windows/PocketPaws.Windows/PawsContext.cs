@@ -192,11 +192,14 @@ internal sealed class PawsContext : ApplicationContext
             using var bitmap = SpriteImages.Portrait(animal);
             Require(bitmap.Width > 0, "Could not render portrait");
         }
-        preferences.AnimalId = "pip";
+        preferences.AnimalId = "sprout";
+        store.Save(preferences);
+        Require(store.Load(animals).AnimalId == "maple", "Sprout selection did not migrate to Maple");
+        preferences.AnimalId = "maple";
         preferences.PixelSize = 3;
         store.Save(preferences);
         var restored = store.Load(animals);
-        Require(restored.AnimalId == "pip" && restored.PixelSize == 3, "Preferences did not round-trip");
+        Require(restored.AnimalId == "maple" && restored.PixelSize == 3, "Preferences did not round-trip");
         preferences.Enabled = false;
         ApplyPreferences();
         Require(!pet.Visible && !timer.Enabled && monitor is null, "Pause did not stop tracking");

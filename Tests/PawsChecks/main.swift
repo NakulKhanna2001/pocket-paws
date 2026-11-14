@@ -116,6 +116,8 @@ check("custom mappings apply to held gestures") {
 check("all bundled animals are valid with unique IDs") {
     let animals = try Animal.bundled()
     try expect(animals.count == 12)
+    try expect(animals.contains { $0.id == "maple" && $0.species == "Red panda" })
+    try expect(!animals.contains { $0.id == "sprout" })
     try expect(Set(animals.map(\.id)).count == animals.count)
     for animal in animals { try animal.validate() }
 }

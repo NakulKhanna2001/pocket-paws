@@ -7,7 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>PocketPaws</AssemblyName>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets/PocketPaws.ico</ApplicationIcon>
     <PublishTrimmed>false</PublishTrimmed>

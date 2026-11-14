@@ -15,6 +15,7 @@ internal sealed class Preferences
 
     internal void Normalize(IReadOnlyList<Animal> animals)
     {
+        if (AnimalId == "sprout" && animals.Any(animal => animal.Id == "maple")) AnimalId = "maple";
         if (!animals.Any(animal => animal.Id == AnimalId)) AnimalId = animals[0].Id;
         PixelSize = Math.Clamp(PixelSize, 1, 3);
         Mappings ??= [];

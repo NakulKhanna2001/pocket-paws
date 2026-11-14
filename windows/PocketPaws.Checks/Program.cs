@@ -18,6 +18,8 @@ Check("all shared animals load with unique IDs, including Pengu", () =>
     var animals = Animal.LoadBundled();
     Expect(animals.Count == 12 && animals.Select(a => a.Id).Distinct().Count() == 12);
     Expect(animals.Single(a => a.Id == "pip").Name == "Pengu");
+    Expect(animals.Single(a => a.Id == "maple").Species == "Red panda");
+    Expect(animals.All(a => a.Id != "sprout"));
     foreach (var animal in animals) animal.Validate();
 });
 Check("click, hold, release, and settle have distinct reactions", () =>

@@ -28,7 +28,11 @@ final class AppModel: ObservableObject {
         precondition(!animals.isEmpty)
         self.animals = animals
         self.defaults = defaults
-        selectedID = defaults.string(forKey: "animal") ?? animals[0].id
+        let savedID = defaults.string(forKey: "animal")
+        let migratedID = savedID == "sprout" ? "maple" : savedID
+        let resolvedID = animals.first { $0.id == migratedID }?.id ?? animals[0].id
+        selectedID = resolvedID
+        if savedID != nil && savedID != resolvedID { defaults.set(resolvedID, forKey: "animal") }
         enabled = defaults.object(forKey: "enabled") as? Bool ?? true
         let savedSize = defaults.integer(forKey: "pixelSize")
         pixelSize = (1...3).contains(savedSize) ? savedSize : 2

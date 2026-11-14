@@ -45,7 +45,7 @@ internal static class Program
                     try
                     {
                         context.SmokeCheck(screenshot);
-                        Report(true, "PASS: Windows overlay, tray, 12 portraits, settings, pause, and resume");
+                        Report(true, "PASS: Windows overlay, tray, 12 portraits, settings, Sprout-to-Maple migration, pause, and resume");
                     }
                     catch (Exception error) { result = 1; Report(false, error.ToString()); }
                     finally { context.ExitThread(); }

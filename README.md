@@ -35,7 +35,7 @@ If the script reports an older Swift version, update your developer tools.
 
 ### Or download the app
 
-1. Download **Pocket-Paws-macOS.zip** from the [Mac release](https://github.com/NakulKhanna2001/pocket-paws/releases/tag/v0.1.2).
+1. Download **Pocket-Paws-macOS.zip** from the [Mac release](https://github.com/NakulKhanna2001/pocket-paws/releases/tag/v0.1.3).
 2. Unzip it and drag **Pocket Paws.app** into **Applications**.
 3. Open it and click the paw icon in the menu bar.
 
@@ -44,7 +44,7 @@ once, then go to **System Settings → Privacy & Security → Open Anyway**.
 
 ## Windows preview
 
-1. Download **Pocket-Paws-Windows-win-x64.zip** from the [Windows preview release](https://github.com/NakulKhanna2001/pocket-paws/releases/tag/windows-v0.1.0).
+1. Download **Pocket-Paws-Windows-win-x64.zip** from the [Windows preview release](https://github.com/NakulKhanna2001/pocket-paws/releases/tag/windows-v0.1.1).
 2. Extract the ZIP and double-click **PocketPaws.exe**.
 3. Click the animal icon in the **system tray** near the clock to choose a friend.
 
@@ -78,7 +78,7 @@ Turn on **Calmer animations** for still poses, or use the main switch to pause i
 | <img src="docs/animals/ember.png" alt="Ember the fox" width="64" height="64"> | Ember | Fox | <img src="docs/animals/sunny.png" alt="Sunny the duck" width="64" height="64"> | Sunny | Duck |
 | <img src="docs/animals/puddle.png" alt="Puddle the frog" width="64" height="64"> | Puddle | Frog | <img src="docs/animals/boba.png" alt="Boba the axolotl" width="64" height="64"> | Boba | Axolotl |
 | <img src="docs/animals/biscuit.png" alt="Biscuit the puppy" width="64" height="64"> | Biscuit | Puppy | <img src="docs/animals/nibble.png" alt="Nibble the hamster" width="64" height="64"> | Nibble | Hamster |
-| <img src="docs/animals/honey.png" alt="Honey the bear" width="64" height="64"> | Honey | Bear | <img src="docs/animals/sprout.png" alt="Sprout the turtle" width="64" height="64"> | Sprout | Turtle |
+| <img src="docs/animals/honey.png" alt="Honey the bear" width="64" height="64"> | Honey | Bear | <img src="docs/animals/maple.png" alt="Maple the red panda" width="64" height="64"> | Maple | Red panda |
 
 ## Update or remove
 

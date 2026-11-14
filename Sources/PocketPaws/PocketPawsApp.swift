@@ -43,6 +43,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: NSStatusItem?
     private let popover = NSPopover()
     private var renderWindow: NSWindow?
+    private var smokeSuite: String?
 
     init(animals: [Animal]) { self.animals = animals }
 
@@ -60,7 +61,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             NSApp.terminate(nil)
             return
         }
-        model = AppModel(animals: animals)
+        if args.contains("--smoke-test") {
+            let suite = "PocketPaws.Smoke.\(UUID().uuidString)"
+            smokeSuite = suite
+            let defaults = UserDefaults(suiteName: suite)!
+            defaults.set("sprout", forKey: "animal")
+            model = AppModel(animals: animals, defaults: defaults)
+        } else {
+            model = AppModel(animals: animals)
+        }
         pet = DesktopPet(model: model)
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         statusItem = item
@@ -80,8 +89,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             // This checks real AppKit window setup without altering saved preferences.
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
                 guard let self else { exit(1) }
-                guard self.statusItem?.button != nil, self.pet != nil else { exit(1) }
-                print("PASS: native app launched, animals loaded, status item and desktop overlay created")
+                guard self.statusItem?.button != nil, self.pet != nil,
+                      self.model.selectedID == "maple",
+                      let suite = self.smokeSuite,
+                      UserDefaults(suiteName: suite)?.string(forKey: "animal") == "maple" else { exit(1) }
+                print("PASS: native app launched, animals loaded, overlay created, Sprout selection migrated to Maple")
                 NSApp.terminate(nil)
             }
         } else {
@@ -94,7 +106,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         return true
     }
 
-    func applicationWillTerminate(_ notification: Notification) { pet?.stop() }
+    func applicationWillTerminate(_ notification: Notification) {
+        pet?.stop()
+        if let smokeSuite { UserDefaults.standard.removePersistentDomain(forName: smokeSuite) }
+    }
 
     @objc private func togglePopover() {
         if popover.isShown { popover.performClose(nil) } else { showPopover() }
